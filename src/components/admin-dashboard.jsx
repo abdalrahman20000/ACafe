@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import { Plus, Edit, Trash2, X, Save, Coffee, ShoppingBag, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Plus, Edit, Trash2, Menu, X, Save, Coffee, ShoppingBag, ArrowLeft, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const initialItems = [
     { id: 1, title: "Espresso", description: "Rich and bold single shot", image: "https://i.pinimg.com/736x/cb/ee/ab/cbeeabf1e1eee5882e145f3465ada74d.jpg", price: 2.50 },
@@ -14,12 +15,15 @@ const initialItems = [
     { id: 8, title: "Iced Tea", description: "Refreshing black tea over ice", image: "https://img.pikbest.com/wp/202345/mint-leaves-cup-with-ice-tea-and-on-a-dark-background_9585688.jpg!bw700", price: 2.00 },
     { id: 9, title: "Fruit Smoothie", description: "Blend of seasonal fruits", image: "https://png.pngtree.com/background/20230610/original/pngtree-this-smoothie-shake-contains-blackberries-picture-image_3024300.jpg", price: 4.25 },
     { id: 10, title: "Pancakes", description: "Fluffy pancakes with maple syrup", image: "https://i.pinimg.com/564x/6d/e1/a8/6de1a8ddb5b3b0234cc21c1befafd7aa.jpg", price: 3.75 },
+    { id: 11, name: "Americano", description: "A drink of similar volume and strength to regular coffee", price: 3.50, rating: 4.5, image: "https://img.freepik.com/premium-photo/cup-coffee-black-background-top-view-coffee-black-cup-with-golden-pattern-black-table_183577-1264.jpg" },
 ];
 
 const AdminPage = () => {
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [deletedProducts, setDeletedProducts] = useState([]);
     const [editingProduct, setEditingProduct] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [newProduct, setNewProduct] = useState({
         id: '',
         title: '',
@@ -39,79 +43,118 @@ const AdminPage = () => {
         }
     }, []);
 
-    const saveProducts = (updatedProducts) => {
-        localStorage.setItem('products', JSON.stringify(updatedProducts));
-        setProducts(updatedProducts);
-    };
+    function handleRestoreAll() {
+        localStorage.setItem('products', JSON.stringify(initialItems));
+        setProducts(initialItems);
+    }
 
     const handleEdit = (product) => {
         setEditingProduct({ ...product });
     };
 
     const handleSave = () => {
-        const updatedProducts = products.map(p =>
-            p.id === editingProduct.id ? editingProduct : p
-        );
-        saveProducts(updatedProducts);
+        const updatedProducts = products.map(p => p.id === editingProduct.id ? editingProduct : p);
+        setProducts(updatedProducts);
+        localStorage.setItem('products', JSON.stringify(updatedProducts));
         setEditingProduct(null);
     };
 
     const handleDelete = (id) => {
-        const productToDelete = products.find(p => p.id === id);
         const updatedProducts = products.filter(p => p.id !== id);
-        saveProducts(updatedProducts);
+        const productToDelete = products.find(p => p.id === id);
+        setProducts(updatedProducts);
         setDeletedProducts([...deletedProducts, productToDelete]);
+        localStorage.setItem('products', JSON.stringify(updatedProducts));
     };
 
     const handleAdd = () => {
-        const updatedProducts = [...products, { ...newProduct, id: Date.now() }];
-        saveProducts(updatedProducts);
+        const newProductWithId = { ...newProduct, id: Date.now() };
+        const updatedProducts = [...products, newProductWithId];
+        setProducts(updatedProducts);
+        localStorage.setItem('products', JSON.stringify(updatedProducts));
         setNewProduct({ id: '', title: '', description: '', image: '', price: '' });
         setShowAddForm(false);
     };
 
-    const handleRestoreAll = () => {
-        saveProducts(initialItems);
-        setDeletedProducts([]);
-    };
-
+    const HeaderButton = ({ onClick, icon: Icon, children, fullWidth }) => (
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onClick}
+            className={`bg-[#ECDFCC] text-[#034c52] py-2 px-4 rounded-full hover:bg-[#d8c9b3] transition-colors flex items-center justify-center ${fullWidth ? 'w-full' : ''}`}
+        >
+            <Icon className="mr-2" size={18} />
+            {children}
+        </motion.button>
+    );
 
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#034c52] to-[#023c41]">
             <header className="bg-[#023c41] text-[#ECDFCC] p-4 shadow-md">
-                <div className="container mx-auto flex items-center justify-between">
-                    <div className="flex items-center">
-                        <button
-                            onClick={() => window.location.href = '/'}
-                            className="mr-4 text-[#ECDFCC] hover:text-white transition-colors"
-                        >
-                            <ArrowLeft size={24} />
-                        </button>
-                        <h1 className="text-2xl font-bold flex items-center">
-                            <Coffee className="mr-2" /> ACafe Admin
-                        </h1>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                        <button
-                            onClick={() => setShowAddForm(!showAddForm)}
-                            className="bg-[#ECDFCC] text-[#034c52] py-2 px-4 rounded-full hover:bg-[#d8c9b3] transition-colors flex items-center"
-                        >
-                            <Plus className="mr-2" size={18} />
-                            Add New Product
-                        </button>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={handleRestoreAll}
-                            className="bg-[#ECDFCC] text-[#034c52] py-2 px-4 rounded-full hover:bg-[#d8c9b3] transition-colors flex items-center"
-                            disabled={deletedProducts.length === 0}
-                        >
-                            <RefreshCw className="mr-2" size={18} />
-                            Restore All ({deletedProducts.length})
-                        </motion.button>
+                <div className="container mx-auto">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <button
+                                onClick={() => { navigate("/ACafe") }}
+                                className="mr-4 text-[#ECDFCC] hover:text-white transition-colors"
+                            >
+                                <ArrowLeft size={24} />
+                            </button>
+                            <h1 className="text-2xl font-bold flex items-center">
+                                <Coffee className="mr-2" /> ACafe Admin
+                            </h1>
+                        </div>
+                        <div className="hidden md:flex items-center space-x-2">
+                            <HeaderButton onClick={() => setShowAddForm(prev => !prev)} icon={Plus}>
+                                Add New Product
+                            </HeaderButton>
+                            <HeaderButton onClick={handleRestoreAll} icon={RefreshCw}>
+                                Restore All
+                            </HeaderButton>
+                        </div>
+                        <div className="md:hidden">
+                            <button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className="text-[#ECDFCC] hover:text-white transition-colors"
+                            >
+                                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        </div>
                     </div>
                 </div>
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="md:hidden mt-4 space-y-2"
+                        >
+                            <HeaderButton
+                                onClick={() => {
+                                    setShowAddForm(prev => !prev);
+                                    setIsMenuOpen(false);
+                                }}
+                                icon={Plus}
+                                fullWidth
+                            >
+                                Add New Product
+                            </HeaderButton>
+                            <HeaderButton
+                                onClick={() => {
+                                    handleRestoreAll();
+                                    setIsMenuOpen(false);
+                                }}
+                                icon={RefreshCw}
+                                fullWidth
+                            >
+                                Restore All
+                            </HeaderButton>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </header>
+
 
             <main className="flex-grow container mx-auto px-4 py-8">
                 <h2 className="text-3xl font-bold text-[#ECDFCC] text-center mb-8">Product Management</h2>

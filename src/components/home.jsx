@@ -1,81 +1,142 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Coffee, Star, ChevronRight, ShoppingCart, Facebook, Instagram, Twitter } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Coffee, Star, ChevronRight, ShoppingCart, Menu, X, Facebook, Instagram, Twitter } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const trendingProducts = [
-    { id: 1, name: "Espresso", price: 2.50, rating: 4.8, image: "https://i.pinimg.com/736x/cb/ee/ab/cbeeabf1e1eee5882e145f3465ada74d.jpg" },
-    { id: 2, name: "Fruit Smoothie", price: 14.99, rating: 4.7, image: "https://png.pngtree.com/background/20230610/original/pngtree-this-smoothie-shake-contains-blackberries-picture-image_3024300.jpg" },
-    { id: 3, name: "Cheesecake", price: 13.99, rating: 4.5, image: "https://i.pinimg.com/564x/92/f3/5e/92f35eaaf2ae0c0ca545e79e1f531516.jpg" },
-    { id: 4, name: "Caramel Macchiato", price: 4.99, rating: 4.9, image: "https://thelittlestcrumb.com/wp-content/uploads/salted-caramel-macchiato-6.jpg" },
-    { id: 5, name: "Espresso Shot", price: 1.35, rating: 4.8, image: "https://img.freepik.com/premium-photo/cup-espresso-coffee-wodden-background_219766-3195.jpg" },
-    { id: 6, name: "Cappuccino", price: 3.99, rating: 4.7, image: "https://i.pinimg.com/564x/4b/65/98/4b6598e5aac6d15608d1459f9a96cc79.jpg" },
-    { id: 7, name: "Latte", price: 4.50, rating: 4.6, image: "https://i.pinimg.com/564x/3b/de/66/3bde660eede0b425a992199c479556c2.jpg" },
-    { id: 8, name: "Mocha", price: 4.00, rating: 4.8, image: "https://img.freepik.com/free-photo/dark-chocolate-mocha-frothy-indulgence-saucer-generated-by-ai_188544-22903.jpg" },
-    { id: 9, name: "Americano", price: 3.50, rating: 4.5, image: "https://img.freepik.com/premium-photo/cup-coffee-black-background-top-view-coffee-black-cup-with-golden-pattern-black-table_183577-1264.jpg" },
-    { id: 10, name: "Cold Brew", price: 4.25, rating: 4.9, image: "https://media.istockphoto.com/id/1072946340/photo/glass-cold-brew-coffee-with-ice-and-milk-on-black-or-dark-background.jpg?s=612x612&w=0&k=20&c=fkZIHaTmBnu23hBfjIS_T4UE_1nsoLjzzx6oNVbmQmg=" },
+const trendingProductss = [
+    { id: 1, title: "Espresso", description: "Rich and bold single shot", image: "https://i.pinimg.com/736x/cb/ee/ab/cbeeabf1e1eee5882e145f3465ada74d.jpg", price: 2.50 },
+    { id: 2, title: "Cappuccino", description: "Espresso with steamed milk and foam", image: "https://i.pinimg.com/564x/4b/65/98/4b6598e5aac6d15608d1459f9a96cc79.jpg", price: 3.50 },
+    { id: 3, title: "Latte", description: "Espresso with lots of steamed milk", image: "https://i.pinimg.com/564x/3b/de/66/3bde660eede0b425a992199c479556c2.jpg", price: 3.75 },
+    { id: 4, title: "Mocha", description: "Espresso with chocolate and steamed milk", image: "https://img.freepik.com/free-photo/dark-chocolate-mocha-frothy-indulgence-saucer-generated-by-ai_188544-22903.jpg", price: 4.00 },
+    { id: 5, title: "Croissant", description: "Buttery, flaky pastry", image: "https://i.pinimg.com/564x/8b/34/39/8b3439a82c12879719290dc04da5a05b.jpg", price: 2.25 },
+    { id: 6, title: "Blueberry Muffin", description: "Moist muffin loaded with blueberries", image: "https://i.pinimg.com/564x/ac/ba/46/acba46775b46a9966d956cf524cd84b9.jpg", price: 2.75 },
+    { id: 7, title: "Cheesecake", description: "Creamy New York style cheesecake", image: "https://i.pinimg.com/564x/92/f3/5e/92f35eaaf2ae0c0ca545e79e1f531516.jpg", price: 4.50 },
+    { id: 8, title: "Iced Tea", description: "Refreshing black tea over ice", image: "https://img.pikbest.com/wp/202345/mint-leaves-cup-with-ice-tea-and-on-a-dark-background_9585688.jpg!bw700", price: 2.00 },
+    { id: 9, title: "Fruit Smoothie", description: "Blend of seasonal fruits", image: "https://png.pngtree.com/background/20230610/original/pngtree-this-smoothie-shake-contains-blackberries-picture-image_3024300.jpg", price: 4.25 },
+    { id: 10, title: "Pancakes", description: "Fluffy pancakes with maple syrup", image: "https://i.pinimg.com/564x/6d/e1/a8/6de1a8ddb5b3b0234cc21c1befafd7aa.jpg", price: 3.75 },
+    { id: 11, name: "Americano", description: "A drink of similar volume and strength to regular coffee", price: 3.50, rating: 4.5, image: "https://img.freepik.com/premium-photo/cup-coffee-black-background-top-view-coffee-black-cup-with-golden-pattern-black-table_183577-1264.jpg" },
 ];
 
 const testimonials = [
-    { id: 1, name: "Sarah L.", text: "ACafe's coffee is the highlight of my mornings. Absolutely delicious!", rating: 5, image: "https://randomuser.me/api/portraits/women/1.jpg" },
-    { id: 2, name: "Mike R.", text: "Great atmosphere and even better coffee. My new favorite spot!", rating: 4, image: "https://randomuser.me/api/portraits/men/2.jpg" },
-    { id: 3, name: "Emily T.", text: "The staff is so friendly and the pastries are to die for!", rating: 5, image: "https://randomuser.me/api/portraits/women/3.jpg" },
-    { id: 4, name: "John D.", text: "I love the variety of coffee beans they offer. A true coffee lover's paradise!", rating: 5, image: "https://randomuser.me/api/portraits/men/4.jpg" },
-    { id: 5, name: "Lisa M.", text: "Their latte art is Instagram-worthy! Tastes as good as it looks.", rating: 4, image: "https://randomuser.me/api/portraits/women/5.jpg" },
-    { id: 6, name: "Alex B.", text: "The ambiance is perfect for both work and casual meetups.", rating: 5, image: "https://randomuser.me/api/portraits/men/6.jpg" },
-    { id: 7, name: "Sophie W.", text: "I'm addicted to their cold brew. Perfect for hot summer days!", rating: 5, image: "https://randomuser.me/api/portraits/women/7.jpg" },
-    { id: 8, name: "David K.", text: "The baristas really know their stuff. Always happy to explain different brews.", rating: 4, image: "https://randomuser.me/api/portraits/men/8.jpg" },
-    { id: 9, name: "Emma S.", text: "Love their commitment to sustainability. Makes the coffee taste even better!", rating: 5, image: "https://randomuser.me/api/portraits/women/9.jpg" },
-    { id: 10, name: "Tom H.", text: "Best coffee shop in town, hands down. Can't start my day without ACafe!", rating: 5, image: "https://randomuser.me/api/portraits/men/10.jpg" },
+    { id: 1, name: "Sarah L.", text: "ACafe's coffee is the highlight of my mornings. Absolutely delicious!", rating: 5, image: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png" },
+    { id: 2, name: "Mike R.", text: "Great atmosphere and even better coffee. My new favorite spot!", rating: 4, image: "https://www.w3schools.com/howto/img_avatar.png" },
+    { id: 3, name: "Emily T.", text: "The staff is so friendly and the pastries are to die for!", rating: 5, image: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png" },
+    { id: 4, name: "John D.", text: "I love the variety of coffee beans they offer. A true coffee lover's paradise!", rating: 5, image: "https://www.w3schools.com/howto/img_avatar.png" },
+    { id: 5, name: "Lisa M.", text: "Their latte art is Instagram-worthy! Tastes as good as it looks.", rating: 4, image: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png" },
+    { id: 6, name: "Alex B.", text: "The ambiance is perfect for both work and casual meetups.", rating: 5, image: "https://www.w3schools.com/howto/img_avatar.png" },
+    { id: 7, name: "Sophie W.", text: "I'm addicted to their cold brew. Perfect for hot summer days!", rating: 5, image: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png" },
+    { id: 8, name: "David K.", text: "The baristas really know their stuff. Always happy to explain different brews.", rating: 4, image: "https://www.w3schools.com/howto/img_avatar.png" },
+    { id: 9, name: "Emma S.", text: "Love their commitment to sustainability. Makes the coffee taste even better!", rating: 5, image: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png" },
+    { id: 10, name: "Tom H.", text: "Best coffee shop in town, hands down. Can't start my day without ACafe!", rating: 5, image: "https://www.w3schools.com/howto/img_avatar.png" },
 ];
 
 const HomePage = () => {
     const navigate = useNavigate();
-    const [trendingProducts, setTrendingProducts] = useState([]);
+    const [products, setProducts] = useState([]);
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         const storedProducts = JSON.parse(localStorage.getItem('products'));
         if (storedProducts && storedProducts.length > 0) {
-            // Sort products by rating (assuming each product has a rating property)
-            const sortedProducts = storedProducts.sort((a, b) => b.rating - a.rating);
-            // Take the top 10 products or less if there are fewer than 10
-            setTrendingProducts(sortedProducts.slice(0, 10));
+            setProducts(storedProducts);
+        } else {
+            setProducts(trendingProductss);
+            localStorage.setItem('products', JSON.stringify(trendingProductss));
         }
     }, []);
 
     return (
         <div className="min-h-screen bg-[#034c52] text-[#ECDFCC]">
             {/* Header */}
-            <header className="bg-[#023c41] p-4 shadow-md">
-                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                    <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                        <Coffee size={32} />
-                        <h1 className="text-2xl font-bold">ACafe</h1>
+            <header className="bg-[#023c41] p-4 shadow-md sticky top-0 z-10">
+                <div className="container mx-auto flex justify-between items-center">
+                    <motion.div
+                        className="flex items-center space-x-2"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Coffee size={32} className="text-[#ECDFCC]" />
+                        <h1 className="text-2xl font-bold text-[#ECDFCC]">ACafe</h1>
+                    </motion.div>
+
+                    <div className="hidden md:flex items-center justify-center flex-grow">
+                        <nav>
+                            <ul className="flex space-x-4">
+                                {['Home', 'Menu', 'About', 'Contact'].map((item) => (
+                                    <li key={item}>
+                                        <a href={item === 'Home' ? '/' : `/ACafe/${item.toLowerCase()}`} className="text-[#ECDFCC] hover:text-white transition-colors">
+                                            {item}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
                     </div>
-                    <nav className="mb-4 md:mb-0">
-                        <ul className="flex flex-wrap justify-center space-x-4">
-                            <li><a href="/" className="hover:text-white transition-colors">Home</a></li>
-                            <li><a href="/menu" className="hover:text-white transition-colors">Menu</a></li>
-                            <li><a href="/about" className="hover:text-white transition-colors">About</a></li>
-                            <li><a href="/contact" className="hover:text-white transition-colors">Contact</a></li>
-                        </ul>
-                    </nav>
-                    <div className="flex space-x-4">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-[#ECDFCC] text-[#034c52] px-4 py-2 rounded-full hover:bg-[#d8c9b3] transition-colors"
-                            onClick={() => navigate('/auth')}
-                        >
-                            Sign In
-                        </motion.button>
-                    </div>
+
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="hidden md:block bg-[#ECDFCC] text-[#034c52] px-4 py-2 rounded-full hover:bg-[#d8c9b3] transition-colors duration-300"
+                        onClick={() => navigate('/auth')}
+                    >
+                        Sign In
+                    </motion.button>
+
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="md:hidden text-[#ECDFCC]"
+                        onClick={toggleMenu}
+                    >
+                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </motion.button>
                 </div>
+
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="md:hidden mt-4"
+                        >
+                            <nav>
+                                <ul className="flex flex-col space-y-2">
+                                    {['Home', 'Menu', 'About', 'Contact'].map((item) => (
+                                        <li key={item}>
+                                            <a
+                                                href={item === 'Home' ? '/' : `/ACafe/${item.toLowerCase()}`}
+                                                className="block text-[#ECDFCC] hover:text-white transition-colors py-2"
+                                                onClick={toggleMenu}
+                                            >
+                                                {item}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="w-full bg-[#ECDFCC] text-[#034c52] px-4 py-2 rounded-full hover:bg-[#d8c9b3] transition-colors duration-300 mt-4"
+                                onClick={() => {
+                                    navigate('/auth');
+                                    toggleMenu();
+                                }}
+                            >
+                                Sign In
+                            </motion.button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </header>
 
             {/* Hero Section */}
@@ -134,12 +195,12 @@ const HomePage = () => {
                         }}
                         className='h-fit pb-10 pt-3 px-4'
                     >
-                        {trendingProducts.map((product) => (
+                        {products.map((product) => (
                             <SwiperSlide key={product.id}>
                                 <motion.div
                                     whileHover={{ scale: 1.05 }}
                                     className="bg-[#ECDFCC] rounded-lg overflow-hidden shadow-lg h-80"
-                                    // onClick={() => navigate('/auth')}
+                                // onClick={() => navigate('/auth')}
                                 >
                                     <div className="relative h-full">
                                         <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
@@ -313,14 +374,14 @@ const HomePage = () => {
                         <h3 className="text-xl font-bold mb-2">ACafe</h3>
                         <p className="text-sm">Brewing perfection since 2010</p>
                     </div>
-                    <div className="container mx-auto mt-8 text-center text-sm">
-                    <p>&copy; 2024 ACafe. All rights reserved.</p>
-                </div>
                     <div className="flex space-x-4">
                         <a className="hover:text-white transition-colors"><Facebook size={24} /></a>
                         <a className="hover:text-white transition-colors"><Instagram size={24} /></a>
                         <a className="hover:text-white transition-colors"><Twitter size={24} /></a>
                     </div>
+                </div>
+                <div className="container mx-auto mt-8 text-center text-sm">
+                    <p>&copy; 2024 ACafe. All rights reserved.</p>
                 </div>
             </footer>
         </div>

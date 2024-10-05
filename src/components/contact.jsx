@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Coffee, MapPin, Phone, Mail, MessageCircle, Send, Facebook, Instagram, Twitter } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Coffee, MapPin, Phone, Mail, MessageCircle, Send, X, Facebook, Instagram, Twitter, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const ContactUsPage = () => {
     const navigate = useNavigate();
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -59,35 +61,94 @@ const ContactUsPage = () => {
             exit="out"
             variants={pageVariants}
             transition={pageTransition}
-            className="min-h-screen bg-gradient-to-b bg-[#034c52] "
+            className="min-h-screen bg-gradient-to-b from-[#034c52] to-[#023c41] text-[#ECDFCC]"
         >
             {/* Header */}
-            <header className="bg-[#023c41] p-4 shadow-md">
-                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                    <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                        <Coffee size={32} />
+            <header className="bg-[#023c41] p-4 shadow-md sticky top-0 z-10">
+                <div className="container mx-auto flex justify-between items-center">
+                    <motion.div
+                        className="flex items-center space-x-2"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Coffee size={32} className="text-[#ECDFCC]" />
                         <h1 className="text-2xl font-bold text-[#ECDFCC]">ACafe</h1>
+                    </motion.div>
+
+                    <div className="hidden md:flex items-center justify-center flex-grow">
+                        <nav>
+                            <ul className="flex space-x-4">
+                                {['Home', 'Menu', 'About', 'Contact'].map((item) => (
+                                    <li key={item}>
+                                        <a href={item === 'Home' ? '/' : `/ACafe/${item.toLowerCase()}`} className="text-[#ECDFCC] hover:text-white transition-colors">
+                                            {item}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
                     </div>
-                    <nav className="mb-4 md:mb-0">
-                        <ul className="flex flex-wrap justify-center space-x-4">
-                            <li><a href="/" className="text-[#ECDFCC] hover:text-white transition-colors">Home</a></li>
-                            <li><a href="/menu" className="text-[#ECDFCC] hover:text-white transition-colors">Menu</a></li>
-                            <li><a href="/about" className="text-[#ECDFCC] hover:text-white transition-colors">About</a></li>
-                            <li><a href="/contact" className="text-[#ECDFCC] hover:text-white transition-colors">Contact</a></li>
-                        </ul>
-                    </nav>
-                    <div className="flex space-x-4">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-[#ECDFCC] text-[#034c52] px-4 py-2 rounded-full hover:bg-[#d8c9b3] transition-colors"
-                            onClick={() => navigate('/auth')}
-                        >
-                            Sign In
-                        </motion.button>
-                    </div>
+
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="hidden md:block bg-[#ECDFCC] text-[#034c52] px-4 py-2 rounded-full hover:bg-[#d8c9b3] transition-colors duration-300"
+                        onClick={() => navigate('/auth')}
+                    >
+                        Sign In
+                    </motion.button>
+
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="md:hidden text-[#ECDFCC]"
+                        onClick={toggleMenu}
+                    >
+                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </motion.button>
                 </div>
+
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="md:hidden mt-4"
+                        >
+                            <nav>
+                                <ul className="flex flex-col space-y-2">
+                                    {['Home', 'Menu', 'About', 'Contact'].map((item) => (
+                                        <li key={item}>
+                                            <a
+                                                href={item === 'Home' ? '/' : `/ACafe/${item.toLowerCase()}`}
+                                                className="block text-[#ECDFCC] hover:text-white transition-colors py-2"
+                                                onClick={toggleMenu}
+                                            >
+                                                {item}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="w-full bg-[#ECDFCC] text-[#034c52] px-4 py-2 rounded-full hover:bg-[#d8c9b3] transition-colors duration-300 mt-4"
+                                onClick={() => {
+                                    navigate('/auth');
+                                    toggleMenu();
+                                }}
+                            >
+                                Sign In
+                            </motion.button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </header>
+
 
             {/* Hero Section */}
             <section className="py-20 px-4 bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
@@ -122,48 +183,40 @@ const ContactUsPage = () => {
                     >
                         <h2 className="text-2xl font-semibold text-[#ECDFCC] mb-6">Send us a message</h2>
                         <form onSubmit={handleSubmit}>
-                            <div className="mb-6">
-                                <label htmlFor="name" className="block text-sm font-medium text-[#ECDFCC] mb-2">
-                                    Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-[#ECDFCC] bg-[#034c52] text-[#ECDFCC] rounded-md focus:outline-none focus:ring-2 focus:ring-[#ECDFCC]"
-                                    required
-                                />
-                            </div>
-                            <div className="mb-6">
-                                <label htmlFor="email" className="block text-sm font-medium text-[#ECDFCC] mb-2">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-[#ECDFCC] bg-[#034c52] text-[#ECDFCC] rounded-md focus:outline-none focus:ring-2 focus:ring-[#ECDFCC]"
-                                    required
-                                />
-                            </div>
-                            <div className="mb-6">
-                                <label htmlFor="message" className="block text-sm font-medium text-[#ECDFCC] mb-2">
-                                    Message
-                                </label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    value={formData.message}
-                                    onChange={handleInputChange}
-                                    rows="4"
-                                    className="w-full px-3 py-2 border border-[#ECDFCC] bg-[#034c52] text-[#ECDFCC] rounded-md focus:outline-none focus:ring-2 focus:ring-[#ECDFCC]"
-                                    required
-                                ></textarea>
-                            </div>
+                            {['name', 'email', 'message'].map((field, index) => (
+                                <motion.div
+                                    key={field}
+                                    className="mb-6"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: 0.1 * index }}
+                                >
+                                    <label htmlFor={field} className="block text-sm font-medium text-[#ECDFCC] mb-2">
+                                        {field.charAt(0).toUpperCase() + field.slice(1)}
+                                    </label>
+                                    {field === 'message' ? (
+                                        <textarea
+                                            id={field}
+                                            name={field}
+                                            value={formData[field]}
+                                            onChange={handleInputChange}
+                                            rows="4"
+                                            className="w-full px-3 py-2 border border-[#ECDFCC] bg-[#034c52] text-[#ECDFCC] rounded-md focus:outline-none focus:ring-2 focus:ring-[#ECDFCC]"
+                                            required
+                                        />
+                                    ) : (
+                                        <input
+                                            type={field === 'email' ? 'email' : 'text'}
+                                            id={field}
+                                            name={field}
+                                            value={formData[field]}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-[#ECDFCC] bg-[#034c52] text-[#ECDFCC] rounded-md focus:outline-none focus:ring-2 focus:ring-[#ECDFCC]"
+                                            required
+                                        />
+                                    )}
+                                </motion.div>
+                            ))}
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
@@ -206,18 +259,19 @@ const ContactUsPage = () => {
                         >
                             <h3 className="text-xl font-semibold mb-4">Follow us</h3>
                             <div className="flex space-x-4">
-                                {['facebook', 'twitter', 'instagram'].map((social) => (
+                                {[
+                                    { name: 'facebook', icon: Facebook },
+                                    { name: 'twitter', icon: Twitter },
+                                    { name: 'instagram', icon: Instagram }
+                                ].map(({ name, icon: Icon }) => (
                                     <motion.a
-                                        key={social}
-                                        target="_blank"
+                                        key={name}
                                         rel="noopener noreferrer"
                                         whileHover={{ scale: 1.2, rotate: 5 }}
                                         whileTap={{ scale: 0.9 }}
                                         className="bg-[#ECDFCC] text-[#034c52] p-2 rounded-full hover:bg-[#d8c9b3] transition duration-300"
                                     >
-                                        {social === 'facebook' && <Facebook size={24} />}
-                                        {social === 'twitter' && <Twitter size={24} />}
-                                        {social === 'instagram' && <Instagram size={24} />}
+                                        <Icon size={24} />
                                     </motion.a>
                                 ))}
                             </div>
@@ -232,29 +286,27 @@ const ContactUsPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 1 }}
-                    className="mt-8"
+                    className="container mx-auto"
                 >
-                    <div className="container mx-auto">
-                        <h2 className="text-3xl font-bold mb-8 text-center text-[#ECDFCC]">Frequently Asked Questions</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {[
-                                { q: "What are your opening hours?", a: "We're open Monday to Friday from 7 AM to 8 PM, and weekends from 8 AM to 6 PM." },
-                                { q: "Do you offer catering services?", a: "Yes, we offer catering for events of all sizes. Please contact us for more information." },
-                                { q: "Are your coffee beans ethically sourced?", a: "Absolutely! We pride ourselves on sourcing our beans from fair trade certified farms." },
-                                { q: "Do you have vegetarian/vegan options?", a: "Yes, we have a variety of vegetarian and vegan options on our menu." },
-                            ].map((faq, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    className="bg-[#034c52] p-6 rounded-lg shadow-lg"
-                                >
-                                    <h3 className="text-xl font-semibold mb-2 text-[#ECDFCC]">{faq.q}</h3>
-                                    <p className="text-[#ECDFCC]">{faq.a}</p>
-                                </motion.div>
-                            ))}
-                        </div>
+                    <h2 className="text-3xl font-bold mb-8 text-center text-[#ECDFCC]">Frequently Asked Questions</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {[
+                            { q: "What are your opening hours?", a: "We're open Monday to Friday from 7 AM to 8 PM, and weekends from 8 AM to 6 PM." },
+                            { q: "Do you offer catering services?", a: "Yes, we offer catering for events of all sizes. Please contact us for more information." },
+                            { q: "Are your coffee beans ethically sourced?", a: "Absolutely! We pride ourselves on sourcing our beans from fair trade certified farms." },
+                            { q: "Do you have vegetarian/vegan options?", a: "Yes, we have a variety of vegetarian and vegan options on our menu." },
+                        ].map((faq, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                className="bg-[#034c52] p-6 rounded-lg shadow-lg"
+                            >
+                                <h3 className="text-xl font-semibold mb-2 text-[#ECDFCC]">{faq.q}</h3>
+                                <p className="text-[#ECDFCC]">{faq.a}</p>
+                            </motion.div>
+                        ))}
                     </div>
                 </motion.div>
             </section>
@@ -266,14 +318,14 @@ const ContactUsPage = () => {
                         <h3 className="text-xl font-bold mb-2">ACafe</h3>
                         <p className="text-sm">Brewing perfection since 2010</p>
                     </div>
-                    <div className="container mx-auto mt-8 text-center text-sm">
-                        <p>&copy; 2024 ACafe. All rights reserved.</p>
-                    </div>
                     <div className="flex space-x-4">
                         <a className="hover:text-white transition-colors"><Facebook size={24} /></a>
                         <a className="hover:text-white transition-colors"><Instagram size={24} /></a>
                         <a className="hover:text-white transition-colors"><Twitter size={24} /></a>
                     </div>
+                </div>
+                <div className="container mx-auto mt-8 text-center text-sm">
+                    <p>&copy; 2024 ACafe. All rights reserved.</p>
                 </div>
             </footer>
         </motion.div>

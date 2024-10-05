@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ShoppingCart, X, Trash2, Plus, Minus, Facebook, Instagram, Twitter, ArrowLeft, Check, CheckCircle } from 'lucide-react';
 import { addToCart, removeFromCart, updateQuantity, clearDeletedProducts } from '../redux/cartSlice';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const ShoppingMarket = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const cart = useSelector(state => state.cart);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [items, setItems] = useState([]);
@@ -82,7 +84,7 @@ const ShoppingMarket = () => {
                 <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
                     <div className="flex items-center mb-2 sm:mb-0">
                         <motion.button
-                            onClick={() => window.location.href = '/'}
+                            onClick={() => {navigate("/ACafe")}}
                             className="mr-4 text-[#ECDFCC] hover:text-white transition-colors"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
@@ -131,18 +133,20 @@ const ShoppingMarket = () => {
             </main>
 
             {/* Footer */}
-            <footer className="bg-[#023c41] text-[#ECDFCC] p-4 mt-8">
-                <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-                    <div className="mb-4 sm:mb-0">
-                        <h3 className="text-xl font-bold">About Us</h3>
-                        <p className="mt-2 text-sm">Serving the finest coffee since 2010</p>
+            <footer className="bg-[#023c41] text-[#ECDFCC] py-8 px-4">
+                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+                    <div className="mb-4 md:mb-0">
+                        <h3 className="text-xl font-bold mb-2">ACafe</h3>
+                        <p className="text-sm">Brewing perfection since 2010</p>
                     </div>
-                    <p className="text-sm">&copy; 2024 ACafe. All rights reserved.</p>
-                    <div className="flex space-x-4 mt-4 sm:mt-0">
-                        <motion.a className="hover:text-white transition-colors" whileHover={{ scale: 1.2 }}><Facebook size={24} /></motion.a>
-                        <motion.a className="hover:text-white transition-colors" whileHover={{ scale: 1.2 }}><Instagram size={24} /></motion.a>
-                        <motion.a className="hover:text-white transition-colors" whileHover={{ scale: 1.2 }}><Twitter size={24} /></motion.a>
+                    <div className="flex space-x-4">
+                        <a className="hover:text-white transition-colors"><Facebook size={24} /></a>
+                        <a className="hover:text-white transition-colors"><Instagram size={24} /></a>
+                        <a className="hover:text-white transition-colors"><Twitter size={24} /></a>
                     </div>
+                </div>
+                <div className="container mx-auto mt-8 text-center text-sm">
+                    <p>&copy; 2024 ACafe. All rights reserved.</p>
                 </div>
             </footer>
 

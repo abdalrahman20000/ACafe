@@ -30,7 +30,7 @@ const AuthPage = () => {
           showConfirmButton: false,
           timer: 1500
         });
-        navigate('/admin');
+        navigate('/ACafe/admin');
       } else {
         Swal.fire({
           position: "center",
@@ -53,7 +53,7 @@ const AuthPage = () => {
           showConfirmButton: false,
           timer: 1500
         });
-        navigate('/shopping');
+        navigate('/ACafe/shopping');
       } else {
         setError('Invalid email or password');
       }
