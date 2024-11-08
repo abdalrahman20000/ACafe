@@ -6,20 +6,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import './App.css'
 
 function App() {
-
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/ACafe/admin" element={<AdminDashboard></AdminDashboard>} />
-
-          <Route path="/ACafe" element={<HomePage></HomePage>}></Route>
-          <Route path="/auth" element={<AuthPage></AuthPage>}></Route>
-          <Route path="/ACafe/shopping" element={<ShoppingMarket></ShoppingMarket>}></Route>
-        </Routes>
-      </BrowserRouter>
-    </>
-  )
+    <BrowserRouter basename="/ACafe"> 
+      <Routes>
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/shopping" element={<ShoppingMarket />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

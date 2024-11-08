@@ -30,7 +30,7 @@ const AuthPage = () => {
           showConfirmButton: false,
           timer: 1500
         });
-        navigate('/ACafe/admin');
+        navigate('/admin');
       } else {
         Swal.fire({
           position: "center",
@@ -53,7 +53,7 @@ const AuthPage = () => {
           showConfirmButton: false,
           timer: 1500
         });
-        navigate('/ACafe/shopping');
+        navigate('/shopping');
       } else {
         setError('Invalid email or password');
       }
@@ -152,33 +152,34 @@ const AuthPage = () => {
             animate="visible"
             exit="exit"
             transition={{ type: 'tween', ease: 'easeInOut', duration: 0.3 }}
-            className="mt-8 space-y-6"
+            className="mt-8"
             onSubmit={handleSubmit}
           >
+            {/* Full Name Field (only visible during sign-up) */}
             {!isLogin && !isAdminLogin && (
-              <div className="rounded-md shadow-sm -space-y-px">
-                <div>
-                  <label htmlFor="name" className="sr-only">Name</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <User className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </div>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-[#034c52] focus:border-[#034c52] focus:z-10 sm:text-sm pl-10"
-                      placeholder="Full Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
+              <div className="rounded-md shadow-sm">
+                <label htmlFor="name" className="sr-only">Name</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-gray-400" aria-hidden="true" />
                   </div>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    className="appearance-none block rounded-t-md w-full px-3 py-[10px] border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#034c52] focus:border-[#034c52] focus:z-10 sm:text-sm pl-10"
+                    placeholder="Full Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
                 </div>
               </div>
             )}
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div>
+
+            {/* Email and Password Fields */}
+            <div className="rounded-md shadow-sm">
+              <div className={!isLogin && !isAdminLogin ? '' : 'pt-0'}>
                 <label htmlFor="email-address" className="sr-only">Email address</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -190,13 +191,14 @@ const AuthPage = () => {
                     type="email"
                     autoComplete="email"
                     required
-                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 ${isLogin || isAdminLogin ? 'rounded-t-md' : ''} focus:outline-none focus:ring-[#034c52] focus:border-[#034c52] focus:z-10 sm:text-sm pl-10`}
+                    className="appearance-none block w-full px-3 py-[10px] border-t border-l border-r border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#034c52] focus:border-[#034c52] focus:z-10 sm:text-sm pl-10"
                     placeholder="Email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
+
               <div>
                 <label htmlFor="password" className="sr-only">Password</label>
                 <div className="relative">
@@ -209,7 +211,7 @@ const AuthPage = () => {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     required
-                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-[#034c52] focus:border-[#034c52] focus:z-10 sm:text-sm pl-10 pr-10"
+                    className="appearance-none block w-full px-3 py-[10px] border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-[#034c52] focus:border-[#034c52] focus:z-10 sm:text-sm pl-10 pr-10"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -246,7 +248,7 @@ const AuthPage = () => {
                 type="submit"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-[#ECDFCC] bg-[#034c52] hover:bg-[#023c41] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#034c52] transition-colors duration-200"
+                className="group relative w-full flex justify-center py-2 px-4 my-8 border border-transparent text-sm font-medium rounded-md text-[#ECDFCC] bg-[#034c52] hover:bg-[#023c41] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#034c52] transition-colors duration-200"
               >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   {isAdminLogin ? <Lock className="h-5 w-5" aria-hidden="true" /> : <ShoppingBag className="h-5 w-5" aria-hidden="true" />}
@@ -256,6 +258,7 @@ const AuthPage = () => {
             </div>
           </motion.form>
         </AnimatePresence>
+
 
         <div className="text-center mt-4 space-y-2">
           {!isAdminLogin && (

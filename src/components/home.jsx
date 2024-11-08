@@ -39,6 +39,8 @@ const testimonials = [
 ];
 
 const HomeContent = ({products}) => {
+    const navigate = useNavigate();
+
     return (
         <div>
             {/* Hero Section */}
@@ -212,7 +214,7 @@ const HomeContent = ({products}) => {
                             <a href="https://www.ncausa.org/About-Coffee/History-of-Coffee"
                                 target='blank'>
                                 <div className="flex items-center mb-4">
-                                    <img src="https://backyardbrew.com/cdn/shop/articles/Where_does_Coffee_come_from_Its_History_Origin.png?v=1726247939" alt="Coffee Origins" className="w-1/3 h-32 object-cover rounded-lg mr-4" />
+                                    <img src="https://img.freepik.com/free-vector/realistic-coffee-background-with-drawings_79603-603.jpg" alt="Coffee Origins" className="w-1/3 h-32 object-cover rounded-lg mr-4" />
                                     <div>
                                         <h3 className="text-[#034c52] text-xl font-semibold mb-2">Coffee Origins</h3>
                                         <p className="text-[#034c52] mb-4">Discover the unique flavors and characteristics of coffee from different regions around the world.</p>

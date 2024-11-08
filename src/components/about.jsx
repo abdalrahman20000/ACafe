@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Coffee, User, Clock, Leaf,Menu,X, Facebook, Instagram, Twitter } from 'lucide-react';
-import { motion,AnimatePresence } from 'framer-motion';
+import { Coffee, User, Clock, Leaf, Menu, X, Facebook, Instagram, Twitter } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import backgroundVideo from "../assets/bgVideo.mp4";
 
 const AboutUsPage = () => {
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
+
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
     const pageVariants = {
         initial: { opacity: 0, y: 50 },
         in: { opacity: 1, y: 0 },
@@ -28,31 +31,43 @@ const AboutUsPage = () => {
             transition={pageTransition}
             className="min-h-screen bg-[#034c52] text-[#ECDFCC]"
         >
-
-            {/* Hero Section */}
+            {/* Hero Section with Background Video */}
             <motion.section
-                className="py-20 px-4 bg-[url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center"
+                className="relative h-[350px] overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
             >
-                <div className="container mx-auto text-center">
-                    <motion.h1
-                        initial={{ opacity: 0, y: -50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-4xl md:text-6xl font-bold mb-4"
-                    >
-                        About ACafe
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-xl mb-8"
-                    >
-                        Brewing passion since 2010
-                    </motion.p>
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute top-0 left-0 w-full h-full object-cover"
+                >
+                    <source src={backgroundVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="container mx-auto text-center">
+                        <motion.h1
+                            initial={{ opacity: 0, y: -50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="text-4xl md:text-6xl font-bold mb-4"
+                        >
+                            About ACafe
+                        </motion.h1>
+                        <motion.p
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="text-xl mb-8"
+                        >
+                            Brewing passion since 2010
+                        </motion.p>
+                    </div>
                 </div>
             </motion.section>
 
@@ -126,7 +141,6 @@ const AboutUsPage = () => {
                     </div>
                 </div>
             </section>
-            
         </motion.div>
     );
 };
