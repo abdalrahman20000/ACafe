@@ -20,7 +20,7 @@ function App() {
           <Route path="/ACafe" element={<HomePage></HomePage>}></Route>
           <Route path="/auth" element={<AuthPage></AuthPage>}></Route>
           <Route path="/ACafe/shopping" element={<ShoppingMarket></ShoppingMarket>}></Route>
-          <Route path="/ACafe/menu" element={<MenuPage></MenuPage>}></Route>
+          <Route path="/menu" element={<MenuPage></MenuPage>}></Route>
           <Route path="/ACafe/about" element={<AboutUsPage></AboutUsPage>} />
           <Route path="/ACafe/contact" element={<ContactUsPage></ContactUsPage>} />
         </Routes>
