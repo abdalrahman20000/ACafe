@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Coffee, User, Clock, Leaf,Menu,X, Facebook, Instagram, Twitter } from 'lucide-react';
 import { motion,AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Header from '../assets/header';
 
 const AboutUsPage = () => {
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -29,12 +28,10 @@ const AboutUsPage = () => {
             transition={pageTransition}
             className="min-h-screen bg-[#034c52] text-[#ECDFCC]"
         >
-            {/* Header */}
-            <Header />
 
             {/* Hero Section */}
             <motion.section
-                className="py-20 px-4 bg-[url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center "
+                className="py-20 px-4 bg-[url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
@@ -44,7 +41,7 @@ const AboutUsPage = () => {
                         initial={{ opacity: 0, y: -50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="text-5xl md:text-6xl font-bold mb-4"
+                        className="text-4xl md:text-6xl font-bold mb-4"
                     >
                         About ACafe
                     </motion.h1>
@@ -129,24 +126,7 @@ const AboutUsPage = () => {
                     </div>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="bg-[#023c41] text-[#ECDFCC] py-8 px-4">
-                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                    <div className="mb-4 md:mb-0">
-                        <h3 className="text-xl font-bold mb-2">ACafe</h3>
-                        <p className="text-sm">Brewing perfection since 2010</p>
-                    </div>
-                    <div className="flex space-x-4">
-                        <a className="hover:text-white transition-colors"><Facebook size={24} /></a>
-                        <a className="hover:text-white transition-colors"><Instagram size={24} /></a>
-                        <a className="hover:text-white transition-colors"><Twitter size={24} /></a>
-                    </div>
-                </div>
-                <div className="container mx-auto mt-8 text-center text-sm">
-                    <p>&copy; 2024 ACafe. All rights reserved.</p>
-                </div>
-            </footer>
+            
         </motion.div>
     );
 };

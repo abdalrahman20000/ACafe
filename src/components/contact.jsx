@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Coffee, MapPin, Phone, Mail, MessageCircle, Send, X, Facebook, Instagram, Twitter, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import Header from '../assets/header';
 
 const ContactUsPage = () => {
     const navigate = useNavigate();
@@ -64,10 +63,7 @@ const ContactUsPage = () => {
             transition={pageTransition}
             className="min-h-screen bg-gradient-to-b from-[#034c52] to-[#023c41] text-[#ECDFCC]"
         >
-            {/* Header */}
-            <Header />
-
-
+ 
             {/* Hero Section */}
             <section className="py-20 px-4 bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center">
                 <div className="container mx-auto text-center">
@@ -229,23 +225,6 @@ const ContactUsPage = () => {
                 </motion.div>
             </section>
 
-            {/* Footer */}
-            <footer className="bg-[#023c41] text-[#ECDFCC] py-8 px-4">
-                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                    <div className="mb-4 md:mb-0">
-                        <h3 className="text-xl font-bold mb-2">ACafe</h3>
-                        <p className="text-sm">Brewing perfection since 2010</p>
-                    </div>
-                    <div className="flex space-x-4">
-                        <a className="hover:text-white transition-colors"><Facebook size={24} /></a>
-                        <a className="hover:text-white transition-colors"><Instagram size={24} /></a>
-                        <a className="hover:text-white transition-colors"><Twitter size={24} /></a>
-                    </div>
-                </div>
-                <div className="container mx-auto mt-8 text-center text-sm">
-                    <p>&copy; 2024 ACafe. All rights reserved.</p>
-                </div>
-            </footer>
         </motion.div>
     );
 };

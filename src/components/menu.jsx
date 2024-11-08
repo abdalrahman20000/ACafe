@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Coffee, ShoppingCart, Star,Menu,X, Facebook, Instagram, Twitter } from 'lucide-react';
 import { motion,AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Header from '../assets/header';
 
 const MenuPage = () => {
     const [products, setProducts] = useState([]);
@@ -32,8 +31,6 @@ const MenuPage = () => {
 
     return (
         <div className="min-h-screen bg-[#034c52] text-[#ECDFCC]">
-            {/* Header */}
-            <Header />
 
             {/* Menu Section */}
             <main className="container mx-auto px-4 py-8">
@@ -63,23 +60,6 @@ const MenuPage = () => {
                 </div>
             </main>
 
-            {/* Footer */}
-            <footer className="bg-[#023c41] text-[#ECDFCC] py-8 px-4">
-                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                    <div className="mb-4 md:mb-0">
-                        <h3 className="text-xl font-bold mb-2">ACafe</h3>
-                        <p className="text-sm">Brewing perfection since 2010</p>
-                    </div>
-                    <div className="flex space-x-4">
-                        <a className="hover:text-white transition-colors"><Facebook size={24} /></a>
-                        <a className="hover:text-white transition-colors"><Instagram size={24} /></a>
-                        <a className="hover:text-white transition-colors"><Twitter size={24} /></a>
-                    </div>
-                </div>
-                <div className="container mx-auto mt-8 text-center text-sm">
-                    <p>&copy; 2024 ACafe. All rights reserved.</p>
-                </div>
-            </footer>
         </div>
     );
 };

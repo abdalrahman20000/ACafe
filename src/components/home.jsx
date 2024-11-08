@@ -7,7 +7,9 @@ import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import Header from '../assets/header';
+import MenuPage from './menu';
+import ContactUsPage from './contact';
+import AboutUsPage from './about';
 
 const trendingProductss = [
     { id: 1, title: "Espresso", description: "Rich and bold single shot", image: "https://i.pinimg.com/736x/cb/ee/ab/cbeeabf1e1eee5882e145f3465ada74d.jpg", price: 2.50 },
@@ -36,25 +38,9 @@ const testimonials = [
     { id: 10, name: "Tom H.", text: "Best coffee shop in town, hands down. Can't start my day without ACafe!", rating: 5, image: "https://www.w3schools.com/howto/img_avatar.png" },
 ];
 
-const HomePage = () => {
-    const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        const storedProducts = JSON.parse(localStorage.getItem('products'));
-        if (storedProducts && storedProducts.length > 0) {
-            setProducts(storedProducts);
-        } else {
-            setProducts(trendingProductss);
-            localStorage.setItem('products', JSON.stringify(trendingProductss));
-        }
-    }, []);
-
+const HomeContent = ({products}) => {
     return (
-        <div className="min-h-screen bg-[#034c52] text-[#ECDFCC]">
-            {/* Header */}
-            <Header />
-
+        <div>
             {/* Hero Section */}
             <section className="py-20 px-4 bg-[url('https://img.freepik.com/premium-photo/top-view-green-desk-with-coffee-cup-leaves-calm-workspace-concept_1235831-94122.jpg?w=900')] bg-cover bg-center">
                 <div className="container mx-auto text-center">
@@ -226,7 +212,7 @@ const HomePage = () => {
                             <a href="https://www.ncausa.org/About-Coffee/History-of-Coffee"
                                 target='blank'>
                                 <div className="flex items-center mb-4">
-                                    <img src="https://www.vermaoffset.com/wp-content/uploads/2024/05/61-copy-2.jpg" alt="Coffee Origins" className="w-1/3 h-32 object-cover rounded-lg mr-4" />
+                                    <img src="https://backyardbrew.com/cdn/shop/articles/Where_does_Coffee_come_from_Its_History_Origin.png?v=1726247939" alt="Coffee Origins" className="w-1/3 h-32 object-cover rounded-lg mr-4" />
                                     <div>
                                         <h3 className="text-[#034c52] text-xl font-semibold mb-2">Coffee Origins</h3>
                                         <p className="text-[#034c52] mb-4">Discover the unique flavors and characteristics of coffee from different regions around the world.</p>
@@ -282,9 +268,177 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
+        </div>
+    )
+};
 
-            {/* Footer */}
-            <footer className="bg-[#023c41] text-[#ECDFCC] py-8 px-4">
+const HomePage = () => {
+    const [products, setProducts] = useState([]);
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activePage, setActivePage] = useState('home');
+
+    useEffect(() => {
+        const storedProducts = JSON.parse(localStorage.getItem('products'));
+        if (storedProducts && storedProducts.length > 0) {
+            setProducts(storedProducts);
+        } else {
+            setProducts(trendingProductss);
+            localStorage.setItem('products', JSON.stringify(trendingProductss));
+        }
+    }, []);
+
+    const renderActivePage = () => {
+        switch (activePage) {
+          case 'home':
+            return <HomeContent products={products}/>;
+          case 'menu':
+            return <MenuPage />;
+          case 'about':
+            return <AboutUsPage />;
+          case 'contact':
+            return <ContactUsPage />;
+          default:
+            return <HomeContent />;
+        }
+      };
+    
+      return (
+        <div className="min-h-screen bg-[#034c52] text-[#ECDFCC]">
+          {/* Header */}
+          <header className="bg-[#023c41] p-4 shadow-md sticky top-0 z-10">
+            <div className="container mx-auto flex justify-between items-center">
+              <motion.div
+                className="flex items-center space-x-2"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Coffee size={32} className="text-[#ECDFCC]" />
+                <h1 className="text-2xl font-bold text-[#ECDFCC]">ACafe</h1>
+              </motion.div>
+    
+              {/* Navigation Links */}
+              <div className="hidden md:flex items-center justify-center flex-grow">
+                <nav>
+                  <ul className="flex space-x-4">
+                    <li>
+                      <button
+                        onClick={() => setActivePage('home')}
+                        className="text-[#ECDFCC] hover:text-white transition-colors"
+                      >
+                        Home
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setActivePage('menu')}
+                        className="text-[#ECDFCC] hover:text-white transition-colors"
+                      >
+                        Menu
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setActivePage('about')}
+                        className="text-[#ECDFCC] hover:text-white transition-colors"
+                      >
+                        About
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setActivePage('contact')}
+                        className="text-[#ECDFCC] hover:text-white transition-colors"
+                      >
+                        Contact
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+    
+              {/* Mobile Menu Button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="md:hidden text-[#ECDFCC]"
+                onClick={toggleMenu}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </motion.button>
+            </div>
+    
+            {/* Mobile Menu */}
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="md:hidden mt-4"
+                >
+                  <nav>
+                    <ul className="flex flex-col space-y-2">
+                      <li>
+                        <button
+                          onClick={() => {
+                            setActivePage('home');
+                            toggleMenu();
+                          }}
+                          className="block text-[#ECDFCC] hover:text-white transition-colors py-2"
+                        >
+                          Home
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            setActivePage('menu');
+                            toggleMenu();
+                          }}
+                          className="block text-[#ECDFCC] hover:text-white transition-colors py-2"
+                        >
+                          Menu
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            setActivePage('about');
+                            toggleMenu();
+                          }}
+                          className="block text-[#ECDFCC] hover:text-white transition-colors py-2"
+                        >
+                          About
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            setActivePage('contact');
+                            toggleMenu();
+                          }}
+                          className="block text-[#ECDFCC] hover:text-white transition-colors py-2"
+                        >
+                          Contact
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </header>
+    
+          {/* Main Content */}
+          <main className="">
+            {renderActivePage()}
+          </main>
+    
+          {/* Footer */}
+          <footer className="bg-[#023c41] text-[#ECDFCC] py-8 px-4">
                 <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
                     <div className="mb-4 md:mb-0">
                         <h3 className="text-xl font-bold mb-2">ACafe</h3>
@@ -301,7 +455,7 @@ const HomePage = () => {
                 </div>
             </footer>
         </div>
-    );
-};
-
-export default HomePage;
+      );
+    };
+    
+    export default HomePage;
