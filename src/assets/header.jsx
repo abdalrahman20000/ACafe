@@ -68,7 +68,7 @@ const Header =()=>{
                                     {['Home', 'Menu', 'About', 'Contact'].map((item) => (
                                         <li key={item}>
                                             <a
-                                                href={item === 'Home' ? '/' : `/ACafe/${item.toLowerCase()}`}
+                                                href={item === 'Home' ? '/ACafe' : `/${item.toLowerCase()}`}
                                                 className="block text-[#ECDFCC] hover:text-white transition-colors py-2"
                                                 onClick={toggleMenu}
                                             >
