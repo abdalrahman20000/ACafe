@@ -84,7 +84,7 @@ const ShoppingMarket = () => {
                 <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
                     <div className="flex items-center mb-2 sm:mb-0">
                         <motion.button
-                            onClick={() => {navigate("/ACafe")}}
+                            onClick={() => {navigate("/")}}
                             className="mr-4 text-[#ECDFCC] hover:text-white transition-colors"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}

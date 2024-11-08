@@ -95,7 +95,7 @@ const AdminPage = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <button
-                                onClick={() => { navigate("/ACafe") }}
+                                onClick={() => { navigate("/") }}
                                 className="mr-4 text-[#ECDFCC] hover:text-white transition-colors"
                             >
                                 <ArrowLeft size={24} />
